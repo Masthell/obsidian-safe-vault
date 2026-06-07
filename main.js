@@ -1,6 +1,6 @@
 'use strict';
 
-const { Plugin, Notice, PluginSettingTab, Setting, Modal, Platform } = require('obsidian');
+const { Plugin, Notice, PluginSettingTab, Setting, Modal } = require('obsidian');
 
 //  Safe Vault — Obsidian Plugin
 //  AES-256-GCM encrypted folder in your vault.
@@ -239,7 +239,7 @@ module.exports = class SafeVaultPlugin extends Plugin {
 
     async _cleanupFolder() {
         if (await this.app.vault.adapter.exists(VAULT_FOLDER)) {
-            try { await this.app.vault.adapter.rmdir(VAULT_FOLDER, true); } catch (_) {}
+            try { await this.app.vault.adapter.rmdir(VAULT_FOLDER, true); } catch (_) { void 0; }
         }
     }
 
@@ -683,7 +683,7 @@ class SafeVaultSettingTab extends PluginSettingTab {
     }
 
     display() {
-        const { containerEl, plugin } = this;
+        const { containerEl } = this;
         containerEl.empty();
         containerEl.addClass('safe-vault-settings');
 
@@ -826,19 +826,19 @@ class SafeVaultSettingTab extends PluginSettingTab {
     // ── Backup
 
     _tabBackup() {
-        const { containerEl, plugin } = this;
+        const { containerEl } = this;
         containerEl.createEl('h3', { text: '💾 Backup & restore' });
 
         new Setting(containerEl).setName('Export encrypted vault (.bin)')
         .setDesc('Download the encrypted vault file as a backup.')
         .addButton(b => b.setButtonText('Export').setCta()
-        .onClick(() => plugin.exportVaultBin()));
+        .onClick(() => this.plugin.exportVaultBin()));
 
         new Setting(containerEl).setName('Import encrypted vault (.bin)')
         .setDesc('Restore vault from a backup file.')
         .addButton(b => b.setButtonText('Choose file').onClick(() => {
             const inp = Object.assign(document.createElement('input'), { type: 'file', accept: '.bin' });
-            inp.onchange = (e) => { const f = e.target.files[0]; if (f) plugin.importVaultBin(f); };
+            inp.onchange = (e) => { const f = e.target.files[0]; if (f) this.plugin.importVaultBin(f); };
             inp.click();
         }));
 
@@ -846,12 +846,12 @@ class SafeVaultSettingTab extends PluginSettingTab {
 
         new Setting(containerEl).setName('Export settings (.json)')
         .addButton(b => b.setButtonText('Export').setCta()
-        .onClick(() => plugin.exportSettings()));
+        .onClick(() => this.plugin.exportSettings()));
 
         new Setting(containerEl).setName('Import settings (.json)')
         .addButton(b => b.setButtonText('Choose file').onClick(() => {
             const inp = Object.assign(document.createElement('input'), { type: 'file', accept: '.json' });
-            inp.onchange = (e) => { const f = e.target.files[0]; if (f) plugin.importSettings(f); };
+            inp.onchange = (e) => { const f = e.target.files[0]; if (f) this.plugin.importSettings(f); };
             inp.click();
         }));
 
