@@ -1,0 +1,10 @@
+{
+    "id": "safe-vault",
+    "name": "Safe Vault",
+    "version": "1.0.0",
+    "minAppVersion": "1.0.0",
+    "description": "AES-256-GCM encrypted folder inside your vault. PIN-protected, auto-locks on inactivity.",
+    "author": "Damila Mutali",
+    "authorUrl": "https://github.com/Masthell",
+    "isDesktopOnly": false
+}
